@@ -1,2 +1,2 @@
-# Spython
-Keep an eye on upcoming CPython releases
+# Anticipython
+Keep an eye on upcoming CPython releases 🧐
