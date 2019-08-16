@@ -1,6 +1,9 @@
+import itertools
+import re
 import sys
 from datetime import datetime
 
+import bs4
 import requests
 
 def error(message):
@@ -35,8 +38,16 @@ def _scrape_releases(pep_html):
     Find the Python versions and their corresponding release dates
     in a PEP for a release schedule.
     """
-    yield 'mock-version-1', datetime.now()
-    yield 'mock-version-2', datetime.now()
+    # As with any scraping, this is a huge hack
+    # and very dependent on how the data happens to be formatted.
+    soup = bs4.BeautifulSoup(pep_html, features='html.parser')
+    sections = (div for div in soup.find_all('div') if div.get('class') == ['section'])
+    list_items = itertools.chain.from_iterable(section.find_all('li') for section in sections)
+
+    for item in list_items:
+        match = re.match(r'(\d\.\d\.\d.*)?: (.*)', item.get_text())
+        if match:
+            yield match.group(1), match.group(2)
 
 def get_release_dates(peps):
     """
