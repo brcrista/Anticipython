@@ -45,7 +45,10 @@ def _scrape_releases(pep_html):
     list_items = itertools.chain.from_iterable(section.find_all('li') for section in sections)
 
     for item in list_items:
-        match = re.match(r'(\d\.\d\.\d.*)?: (.*)', item.get_text())
+        # examples of lines we want to match:
+        # 3.7.4 final: 2019-07-08
+        # 3.8.0 alpha 1: Sunday, 2019-02-03
+        match = re.match(r'(\d\.\d\.\d.*)?: (?:\w*, )?(\d\d\d\d-\d\d-\d\d)', item.get_text())
         if match:
             yield match.group(1), match.group(2)
 
