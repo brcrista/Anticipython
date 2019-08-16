@@ -3,6 +3,8 @@ from datetime import datetime
 
 import requests
 
+from peps import format_pep_number
+
 def error(message):
     print(message, file=sys.stderr)
 
@@ -11,8 +13,7 @@ def _download(pep_number):
     Fetches PEP files as HTML from python.org.
     """
     # PEP URLs look like https://www.python.org/dev/peps/pep-0123/
-    formatted_pep_number = str(pep_number).rjust(4, '0')
-    url = f'https://www.python.org/dev/peps/pep-{formatted_pep_number}/'
+    url = f'https://www.python.org/dev/peps/pep-{format_pep_number(pep_number)}/'
 
     print(f'Downloading PEP {pep_number} ...')
     response = requests.get(url)
