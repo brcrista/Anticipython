@@ -1,0 +1,22 @@
+trigger:
+- 'master'
+
+pool:
+  vmImage: 'ubuntu-16.04'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3'
+  displayName: 'Use latest Python 3'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- script: python anticipython/main.py
+  displayName: 'Run once'
+
+- script: python anticipython/main.py
+  displayName: 'Run again'
