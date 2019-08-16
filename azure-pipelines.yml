@@ -7,7 +7,7 @@ pool:
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3'
+    versionSpec: '>= 3.6'
   displayName: 'Use latest Python 3'
 
 - script: |
@@ -16,7 +16,4 @@ steps:
   displayName: 'Install dependencies'
 
 - script: python anticipython/main.py
-  displayName: 'Run once'
-
-- script: python anticipython/main.py
-  displayName: 'Run again'
+  displayName: 'Run the script'

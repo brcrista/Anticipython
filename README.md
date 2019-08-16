@@ -6,6 +6,8 @@ Keep an eye on upcoming CPython releases 🧐
 
 ## Usage
 
+Requires Python 3.6 or later.
+
 ```bash
 git clone https://github.com/brcrista/Anticipython.git
 cd Anticipython

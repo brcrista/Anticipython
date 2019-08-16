@@ -3,17 +3,22 @@ from datetime import datetime
 
 import requests
 
-from peps import format_pep_number
-
 def error(message):
     print(message, file=sys.stderr)
+
+def _format_pep_number(pep_number):
+    """
+    The PEP number as a 4-digit string.
+    This is the format used by the URLs on python.org.
+    """
+    return str(pep_number).rjust(4, '0')
 
 def _download(pep_number):
     """
     Fetches PEP files as HTML from python.org.
     """
     # PEP URLs look like https://www.python.org/dev/peps/pep-0123/
-    url = f'https://www.python.org/dev/peps/pep-{format_pep_number(pep_number)}/'
+    url = f'https://www.python.org/dev/peps/pep-{_format_pep_number(pep_number)}/'
 
     print(f'Downloading PEP {pep_number} ...')
     response = requests.get(url)
@@ -33,13 +38,10 @@ def _scrape_releases(pep_html):
     yield 'mock-version-1', datetime.now()
     yield 'mock-version-2', datetime.now()
 
-def get_release_dates(peps, peps_store):
+def get_release_dates(peps):
     """
     Create a mapping of Python versions to their release dates.
     """
     for version, pep_number in peps.items():
-        html = peps_store.load_pep(pep_number)
-        if html is None:
-            html = _download(pep_number)
-            peps_store.store_pep(pep_number, html)
+        html = _download(pep_number)
         yield from _scrape_releases(html)
