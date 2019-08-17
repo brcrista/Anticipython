@@ -69,8 +69,8 @@ def create_ical(releases):
         print(f'Adding "{release.version}" to the calendar')
         event = icalendar.Event()
         event.add('summary', f'{release.version} release')
-        event.add('dtstart', release.date)
-        event.add('duration', datetime.timedelta(days=1))
+        # Use the DATE type with no DTEND to get an all-day event
+        event['dtstart'] = icalendar.prop.vDate(release.date)
         calendar.add_component(event)
     return calendar
 
