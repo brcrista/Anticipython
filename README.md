@@ -2,7 +2,7 @@
 
 [![Build Status](https://dev.azure.com/briancristante/Anticipython/_apis/build/status/Anticipython?branchName=master)](https://dev.azure.com/briancristante/Anticipython/_build/latest?definitionId=10&branchName=master)
 
-Create calendars for upcoming CPython releases 🐍👀
+Create .ics calendars for upcoming CPython releases 🐍👀
 
 ## Usage
 
