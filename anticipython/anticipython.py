@@ -1,13 +1,9 @@
 import itertools
 import re
-import sys
 from datetime import datetime
 
 import bs4
 import requests
-
-def error(message):
-    print(message, file=sys.stderr)
 
 def _format_pep_number(pep_number):
     """
@@ -22,16 +18,12 @@ def _download(pep_number):
     """
     # PEP URLs look like https://www.python.org/dev/peps/pep-0123/
     url = f'https://www.python.org/dev/peps/pep-{_format_pep_number(pep_number)}/'
-
-    print(f'Downloading PEP {pep_number} ...')
     response = requests.get(url)
 
     if response.status_code == 200:
-        print('Done.')
         return response.text
     else:
-        error(f'Could not download {url}. Status code: {response.status_code}')
-        return None
+        raise IOError(f'Could not download {url}. Status code: {response.status_code}')
 
 def _scrape_releases(pep_html):
     """
@@ -57,5 +49,10 @@ def get_release_dates(peps):
     Create a mapping of Python versions to their release dates.
     """
     for version, pep_number in peps.items():
+        print(f'Downloading PEP {pep_number} ...')
         html = _download(pep_number)
+        print('Done.')
+
+        print(f'Scraping PEP {pep_number} for releases ...')
         yield from _scrape_releases(html)
+        print('Done.')
