@@ -5,9 +5,9 @@ import peps
 
 def main():
     try:
-        release_dates = anticipython.get_release_dates(peps.peps)
-        for version, date in release_dates:
-            print(f'{version}: {date}')
+        releases = anticipython.get_release_dates(peps.peps)
+        calendar = anticipython.create_ical(releases)
+        anticipython.save_ical(calendar, 'cpython_releases.ics')
         return 0
     except Exception as ex:
         print(ex, file=sys.stderr)

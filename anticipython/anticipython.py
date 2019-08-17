@@ -1,8 +1,8 @@
-import itertools
+import datetime
 import re
-from datetime import datetime
 
 import bs4
+import icalendar
 import requests
 
 def _format_pep_number(pep_number):
@@ -25,6 +25,11 @@ def _download(pep_number):
     else:
         raise IOError(f'Could not download {url}. Status code: {response.status_code}')
 
+class Release:
+    def __init__(self, version, date):
+        self.version = version
+        self.date = datetime.datetime.strptime(date, '%Y-%m-%d')
+
 def _scrape_releases(pep_html):
     """
     Find the Python versions and their corresponding release dates
@@ -33,20 +38,17 @@ def _scrape_releases(pep_html):
     # As with any scraping, this is a huge hack
     # and very dependent on how the data happens to be formatted.
     soup = bs4.BeautifulSoup(pep_html, features='html.parser')
-    sections = (div for div in soup.find_all('div') if div.get('class') == ['section'])
-    list_items = itertools.chain.from_iterable(section.find_all('li') for section in sections)
-
-    for item in list_items:
+    for li in soup.find_all('li'):
         # examples of lines we want to match:
         # 3.7.4 final: 2019-07-08
         # 3.8.0 alpha 1: Sunday, 2019-02-03
-        match = re.match(r'(\d\.\d\.\d.*)?: (?:\w*, )?(\d\d\d\d-\d\d-\d\d)', item.get_text())
+        match = re.match(r'(\d\.\d\.\d.*)?: (?:\w*, )?(\d\d\d\d-\d\d-\d\d)', li.get_text())
         if match:
-            yield match.group(1), match.group(2)
+            yield Release(version=match.group(1), date=match.group(2))
 
 def get_release_dates(peps):
     """
-    Create a mapping of Python versions to their release dates.
+    Create a sequence of Python versions and their release dates.
     """
     for version, pep_number in peps.items():
         print(f'Downloading PEP {pep_number} ...')
@@ -56,3 +58,22 @@ def get_release_dates(peps):
         print(f'Scraping PEP {pep_number} for releases ...')
         yield from _scrape_releases(html)
         print('Done.')
+
+def create_ical(releases):
+    calendar = icalendar.Calendar()
+    # Required to be compliant with RFC 2445
+    calendar.add('prodid', '-//Anticipython//https://github.com/brcrista/Anticipython//')
+    calendar.add('version', '2.0')
+
+    for release in releases:
+        print(f'Adding "{release.version}" to the calendar')
+        event = icalendar.Event()
+        event.add('summary', f'{release.version} release')
+        event.add('dtstart', release.date)
+        event.add('duration', datetime.timedelta(days=1))
+        calendar.add_component(event)
+    return calendar
+
+def save_ical(calendar, filepath):
+    with open(filepath, 'wb') as ical_file:
+        ical_file.write(calendar.to_ical())
