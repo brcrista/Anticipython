@@ -9,11 +9,9 @@ Create .ics calendars for upcoming CPython releases 🐍👀
 Requires Python 3.6 or later.
 
 ```bash
-git clone https://github.com/brcrista/Anticipython.git
-cd Anticipython
-# Maybe do a venv or something
-pip install -r requirements.txt
-python anticipython/main.py
+pip install https://github.com/brcrista/Anticipython.git
+python -m anticipython
+# Produces an output file named `cpython_releases.ics`
 ```
 
 ### Power user configuration
