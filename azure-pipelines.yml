@@ -15,5 +15,5 @@ steps:
     pip install -r requirements.txt
   displayName: 'Install dependencies'
 
-- script: python anticipython/main.py
-  displayName: 'Run the script'
+- script: python -m anticipython
+  displayName: 'Execute the package'
