@@ -7,7 +7,7 @@ def read(filename):
 
 setup(
     name='anticipython',
-    version='1.0.0',
+    version='1.0.1',
     description='Create .ics calendars for upcoming CPython releases 🐍👀',
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
