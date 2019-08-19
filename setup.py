@@ -11,6 +11,11 @@ setup(
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
     packages=['anticipython'],
+    requires=[
+        'beautifulsoup4',
+        'icalendar',
+        'requests'
+    ],
     python_requires='>=3.6',
     url='https://github.com/brcrista/Anticipython',
     author='Brian Cristante',
