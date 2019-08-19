@@ -1,4 +1,3 @@
-
 from setuptools import setup
 
 def read(filename):
@@ -22,4 +21,5 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
     ],
+    python_requires='>=3.6'
 )
