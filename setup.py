@@ -1,4 +1,3 @@
-
 from setuptools import setup
 
 def read(filename):
