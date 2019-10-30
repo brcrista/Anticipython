@@ -13,7 +13,7 @@ jobs:
         python: [3.6, 3.7, 3.8]
 
     # As of 10/30/19, the macOS environment does not have Python 3.8
-    if: !(matrix.os == 'macOS-10.14' && matrix.python == '3.8')
+    if: matrix.os != 'macOS-10.14' || matrix.python != '3.8'
     steps:
     - uses: actions/checkout@v1
     - name: Set up Python
