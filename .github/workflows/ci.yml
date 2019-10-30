@@ -11,9 +11,11 @@ jobs:
       matrix:
         os: [ubuntu-18.04, macOS-10.14, windows-2019]
         python: [3.6, 3.7, 3.8]
+        # As of 10/30/19, the macOS environment does not have Python 3.8: [value1, ...valueN]
+        exclude:
+          - os: macOS-10.14
+            python: 3.8
 
-    # As of 10/30/19, the macOS environment does not have Python 3.8
-#     if: !(matrix.os == 'macOS-10.14' && matrix.python == '3.8')
     if: job.matrix.os != 'macOS-10.14'
     steps:
     - uses: actions/checkout@v1
